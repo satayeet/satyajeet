@@ -14,7 +14,7 @@ import javax.persistence.Table;
  *This class is mapped to courses table in DB. It fetches available courses in db.
  *information of student
  *                                                                                                                 
- * @author  Quazi Mohammed Farhan Ali.                                                                             
+ * @author Biswajeet Choubey                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  

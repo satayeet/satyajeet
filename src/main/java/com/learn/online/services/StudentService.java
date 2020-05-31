@@ -8,7 +8,7 @@ package com.learn.online.services;
  * UserDetailService interface that is org.springframework.security.core.userdetails.UserDetailsService for 
  * Spring security.
  *                        
- * @author  Quazi Mohammed Farhan Ali.                                                                             
+ * @author Biswajeet Choubey                                                                             
  * @version 1.0                        
  * @Purpose PIP Assignment to employee by Cognizant                                                                             
  * @since   2020-05-29                                                                                                                                                                                                                  

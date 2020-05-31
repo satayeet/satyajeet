@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * StudentServideImple has loadUserByUsername method this method providesthe instance of UserPrincipal that
  *  provides all authorization, role information from db to filters bean        
  *                                                                                                                 
- * @author  Quazi Mohammed Farhan Ali.                                                                             
+ * @author Biswajeet Choubey                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  
