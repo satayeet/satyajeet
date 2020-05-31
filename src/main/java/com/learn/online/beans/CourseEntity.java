@@ -1,5 +1,6 @@
 package com.learn.online.beans;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +9,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/***********************************************************************************************************
+ * <h1>CourseEntity!</h1>																					 
+ *This class is mapped to courses table in DB. It fetches available courses in db.
+ *information of student
+ *                                                                                                                 
+ * @author  Quazi Mohammed Farhan Ali.                                                                             
+ * @version 1.0           
+ * @Purpose PIP Assignment to employee by Cognizant                                                                                           
+ * @since   2020-05-29                                                                                                                                                                                                                  
+ ************************************************************************************************************/
+
+
 @Entity
 @Table(name = "courses")
-public class CourseEntity {
+public class CourseEntity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

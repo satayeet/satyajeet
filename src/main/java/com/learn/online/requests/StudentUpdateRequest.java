@@ -1,7 +1,8 @@
 package com.learn.online.requests;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -14,7 +15,9 @@ import com.learn.online.custom.validation.annotations.ValidPassword;
 	@FieldMatch(first = "password", second="repassword", message = "{type.retyped.password.match}"),
 	@FieldMatch(first = "email", second = "reemail" , message = "{type.retyped.email.match}")
 })
-public class StudentUpdateRequest {
+public class StudentUpdateRequest implements Serializable {
+
+	private static final long serialVersionUID = -4400406329218475151L;
 
 	@NotBlank(message = "{firstname.mandatory}")
 	private String firstName;
@@ -44,6 +47,7 @@ public class StudentUpdateRequest {
 	
 	private String country;
 	private String state;
+	private Boolean active;
 
 	public String getFirstName() {
 		return firstName;
@@ -115,6 +119,14 @@ public class StudentUpdateRequest {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	@Override

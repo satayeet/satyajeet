@@ -1,8 +1,11 @@
 package com.learn.online.responses;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ErrorMessageResponse {
+public class ErrorMessageResponse implements Serializable {
+
+	private static final long serialVersionUID = -4390890250997332455L;
 
 	private LocalDate localDate;
 	private String message;

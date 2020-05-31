@@ -1,9 +1,11 @@
 package com.learn.online.beans;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,9 +13,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/***********************************************************************************************************
+ * <h1>CourseOrderEntity!</h1>																					 
+ *This bean manage the order information of placed by student and then it stores it in db 
+ *table of course_orders
+ *                                                                                                                 
+ * @author  Quazi Mohammed Farhan Ali.                                                                             
+ * @version 1.0           
+ * @Purpose PIP Assignment to employee by Cognizant                                                                                           
+ * @since   2020-05-29                                                                                                                                                                                                                  
+ ************************************************************************************************************/
+
 @Entity
 @Table(name = "course_orders")
-public class CourseOrderEntity {
+public class CourseOrderEntity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +42,7 @@ public class CourseOrderEntity {
 	@JoinColumn(name = "f_student_id")
 	private StudentEntity student;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "f_course_id")
 	private CourseEntity course;
 

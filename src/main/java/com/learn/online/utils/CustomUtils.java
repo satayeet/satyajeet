@@ -6,25 +6,33 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.learn.online.beans.CourseEntity;
 import com.learn.online.beans.CourseOrderEntity;
+import com.learn.online.beans.RoleEntity;
 import com.learn.online.beans.StudentEntity;
+import com.learn.online.daos.RoleEntityDao;
 import com.learn.online.dtos.CourseDto;
 import com.learn.online.dtos.CourseOrderDto;
 import com.learn.online.dtos.StudentDto;
+import com.learn.online.securities.UserPrincipal;
 
 public class CustomUtils {
 
 	
 	private static Logger LOGGER = LogManager.getLogger(CustomUtils.class);
 	
+	////after some it will be replaced with following method
 	public static StudentEntity convertToStudentEntity(StudentDto studdentDto) {
 		
 		LOGGER.info("CustomUtils::convertToStudentEntity() Started");
@@ -87,7 +95,6 @@ public class CustomUtils {
 				tempStudentEntity.setState(courseOrderDto.getStudent().getState());
 				tempStudentEntity.setStudentId(courseOrderDto.getStudent().getStudentId());
 				tempStudentEntity.setStudentKey(courseOrderDto.getStudent().getStudentKey());
-				tempStudentEntity.setCourseOrders(courseOrderEntity.getStudent().getCourseOrders());
 			}
 			
 			courseOrderEntity.setStudent(tempStudentEntity);
@@ -113,7 +120,113 @@ public class CustomUtils {
 		LOGGER.info("CustomUtils::convertToStudentEntity() Completed");
 		
 		return studentEntity;
-	}
+	}//// after some it will be replaced with following method
+	
+	
+	////User this method and remove its overloaded method with one argument.
+	public static StudentEntity convertToStudentEntity(StudentDto studdentDto, 
+				BCryptPasswordEncoder bCryptPasswordEncoder, RoleEntityDao roleEntityDao) {
+		
+		LOGGER.info("CustomUtils::convertToStudentEntity() Started");
+		
+		StudentEntity studentEntity = new StudentEntity();
+		
+		LOGGER.info("Converting StudentDto to Student Entity {} {}", 
+					studdentDto.getFirstName(), studdentDto.getLastName());
+		
+		studentEntity.setActive(studdentDto.isActive());
+		studentEntity.setCountry(studdentDto.getCountry());
+		studentEntity.setCity(studdentDto.getCity());
+		
+		List<CourseOrderEntity> courseOrderEntityList = new ArrayList<>();
+		if(studdentDto.getCourseOrders() !=null) {
+			
+			LOGGER.info("Converting List of OrderedCourseEntity to List of OrderedCourseDto");
+			
+			courseOrderEntityList = studdentDto.getCourseOrders().stream().map(courseOrderDto->{
+			
+			CourseOrderEntity courseOrderEntity = new CourseOrderEntity();
+			
+			CourseEntity courseEntity = new CourseEntity();
+			courseEntity.setChapters(courseOrderDto.getCourse().getChapters());
+			courseEntity.setCourseId(courseOrderDto.getCourse().getCourseId());
+			courseEntity.setCourseKey(courseOrderDto.getCourse().getCourseKey());
+			courseEntity.setCourseName(courseOrderDto.getCourse().getCourseName());
+			courseEntity.setCreationtDate(courseOrderDto.getCourse().getCreationtDate());
+			courseEntity.setDescription(courseOrderDto.getCourse().getDescription());
+			courseEntity.setDomainName(courseOrderDto.getCourse().getDomainName());
+			courseEntity.setDurationInHours(courseOrderDto.getCourse().getDurationInHours());
+			courseEntity.setLastUpdateDate(courseOrderDto.getCourse().getLastUpdateDate());
+			courseEntity.setPrice(courseOrderDto.getCourse().getPrice());
+			courseEntity.setRating(courseOrderDto.getCourse().getRating());
+			
+			courseOrderEntity.setCourse(courseEntity);
+			
+			courseOrderEntity.setCourseOrderId(courseOrderDto.getCourseOrderId());
+			courseOrderEntity.setCourseOrderKey(courseOrderDto.getCourseOrderKey());
+			courseOrderEntity.setCreationDate(courseOrderDto.getCreationDate());
+			courseOrderEntity.setDiscount(courseOrderDto.getDiscount());
+			courseOrderEntity.setLastUpdateDate(courseOrderDto.getLastUpdateDate());
+			courseOrderEntity.setRating(courseOrderDto.getRating());
+			
+			StudentEntity tempStudentEntity = new StudentEntity();
+			tempStudentEntity.setCourseOrders(studentEntity.getCourseOrders());
+			
+			if(courseOrderDto.getStudent() != null) {
+				
+				tempStudentEntity.setActive(courseOrderDto.getStudent().isActive());
+				tempStudentEntity.setCountry(courseOrderDto.getStudent().getCountry());
+				
+				tempStudentEntity.setCreationtDate(courseOrderDto.getStudent().getCreationtDate());
+				tempStudentEntity.setEmail(courseOrderDto.getStudent().getEmail());
+				tempStudentEntity.setEncryptedPassword(courseOrderDto.getStudent().getEncryptedPassword());
+				tempStudentEntity.setFirstName(courseOrderDto.getStudent().getFirstName());
+				tempStudentEntity.setLastName(courseOrderDto.getStudent().getLastName());
+				tempStudentEntity.setLastUpdateDate(courseOrderDto.getStudent().getLastUpdateDate());
+				tempStudentEntity.setPhone(courseOrderDto.getStudent().getPhone());
+				tempStudentEntity.setState(courseOrderDto.getStudent().getState());
+				tempStudentEntity.setStudentId(courseOrderDto.getStudent().getStudentId());
+				tempStudentEntity.setStudentKey(courseOrderDto.getStudent().getStudentKey());
+			}
+			
+			courseOrderEntity.setStudent(tempStudentEntity);
+			
+			return courseOrderEntity;
+		}).collect(Collectors.toList());
+		}
+		
+		studentEntity.setCourseOrders(courseOrderEntityList);
+		studentEntity.setCreationtDate(studdentDto.getCreationtDate());
+		studentEntity.setEmail(studdentDto.getEmail());
+		
+		studdentDto.setEncryptedPassword(bCryptPasswordEncoder.encode(studdentDto.getPassword()));
+		studentEntity.setEncryptedPassword(studdentDto.getEncryptedPassword());
+		studentEntity.setFirstName(studdentDto.getFirstName());
+		studentEntity.setLastName(studdentDto.getLastName());
+		studentEntity.setLastUpdateDate(studdentDto.getLastUpdateDate());
+		studentEntity.setPhone(studdentDto.getPhone());
+		studentEntity.setState(studdentDto.getState());
+		studentEntity.setStudentId(studdentDto.getStudentId());
+		studentEntity.setStudentKey(CustomUtils.getSHA256());
+		studentEntity.setCreationtDate(LocalDate.now());
+		
+		
+		Set<RoleEntity> roleSet = new HashSet<RoleEntity>();
+		RoleEntity roleEntity;
+		for(String roleName : studdentDto.getRoles()) {
+			roleEntity = roleEntityDao.findByName(roleName).orElseGet(null);
+			if(roleEntity != null) {
+				roleSet.add(roleEntity);
+			}
+		}
+		
+		studentEntity.setRoles(roleSet);
+		LOGGER.info("CustomUtils::convertToStudentEntity() Completed");
+		
+		return studentEntity;
+	} //User this method and remove its overloaded method with one argument. 
+	
+	
 	
 	public static CourseEntity convertToCourseEntity(CourseDto courseDto) {
 		
@@ -187,19 +300,21 @@ public class CustomUtils {
 			StudentDto tempStudentDto = new StudentDto();
 			tempStudentDto.setCourseOrders(studentDto.getCourseOrders());
 			
-			if(courseOrderDto.getStudent() != null) {
-				tempStudentDto.setActive(courseOrderDto.getStudent().isActive());
-				tempStudentDto.setCountry(courseOrderDto.getStudent().getCountry());
-				tempStudentDto.setCreationtDate(courseOrderDto.getStudent().getCreationtDate());
-				tempStudentDto.setEmail(courseOrderDto.getStudent().getEmail());
-				tempStudentDto.setEncryptedPassword(courseOrderDto.getStudent().getEncryptedPassword());
-				tempStudentDto.setFirstName(courseOrderDto.getStudent().getFirstName());
-				tempStudentDto.setLastName(courseOrderDto.getStudent().getLastName());
-				tempStudentDto.setLastUpdateDate(courseOrderDto.getStudent().getLastUpdateDate());
-				tempStudentDto.setPhone(courseOrderDto.getStudent().getPhone());
-				tempStudentDto.setState(courseOrderDto.getStudent().getState());
-				tempStudentDto.setStudentId(courseOrderDto.getStudent().getStudentId());
-				tempStudentDto.setStudentKey(courseOrderDto.getStudent().getStudentKey());
+			//if(courseOrderDto.getStudent() != null) {
+			if(courseOrderEntity.getStudent() != null) {	
+				
+				tempStudentDto.setActive(courseOrderEntity.getStudent().isActive());
+				tempStudentDto.setCountry(courseOrderEntity.getStudent().getCountry());
+				tempStudentDto.setCreationtDate(courseOrderEntity.getStudent().getCreationtDate());
+				tempStudentDto.setEmail(courseOrderEntity.getStudent().getEmail());
+				tempStudentDto.setEncryptedPassword(courseOrderEntity.getStudent().getEncryptedPassword());
+				tempStudentDto.setFirstName(courseOrderEntity.getStudent().getFirstName());
+				tempStudentDto.setLastName(courseOrderEntity.getStudent().getLastName());
+				tempStudentDto.setLastUpdateDate(courseOrderEntity.getStudent().getLastUpdateDate());
+				tempStudentDto.setPhone(courseOrderEntity.getStudent().getPhone());
+				tempStudentDto.setState(courseOrderEntity.getStudent().getState());
+				tempStudentDto.setStudentId(courseOrderEntity.getStudent().getStudentId());
+				tempStudentDto.setStudentKey(courseOrderEntity.getStudent().getStudentKey());
 				courseOrderDto.setStudent(tempStudentDto);
 			}
 			
@@ -219,6 +334,12 @@ public class CustomUtils {
 		studentDto.setStudentId(studentEntity.getStudentId());
 		studentDto.setStudentKey(studentEntity.getStudentKey());
 		
+		Set<String> strRoleCollection = new HashSet<String>();
+		studentEntity.getRoles().forEach(role->{
+			strRoleCollection.add(role.getName());
+		});
+		
+		studentDto.setRoles(strRoleCollection);
 		LOGGER.info("CustomUtils::convertToStudentDto() Completed");
 		
 		return studentDto;
@@ -517,6 +638,7 @@ public class CustomUtils {
 		return hexString.toString();
 	}
 
+	//This method will be removed and its overloaded method of two argument will be used in future
 	public static StudentEntity loadStudentEntityForUpdate(StudentDto studentDto, StudentEntity studentEntity) {
 		
 		LOGGER.info("CustomUtils::loadStudentEntityForUpdate() Started");
@@ -538,6 +660,47 @@ public class CustomUtils {
 		LOGGER.info("CustomUtils::loadStudentEntityForUpdate() Completed");
 		return studentEntity;
 	}
+	//This method will be removed and its overloaded method of two argument will be used in future
+	
+	public static StudentEntity loadStudentEntityForUpdate(StudentDto studentDto, StudentEntity studentEntity, 
+				BCryptPasswordEncoder bCryptPasswordEncoder, UserPrincipal userPrincipal) {
+		
+		LOGGER.info("CustomUtils::loadStudentEntityForUpdate() Started");
+		LOGGER.info("Converting StudentEntity to StudentDto for profile update hence no need to assign list of "
+				+ "coure order entity from studentEntity to list of CourseOrder property of StudentDto");
+		
+		
+		/*
+			If currently logged in student is admin and he is updating other student profile 
+			then can be allowed to update active or inactive state of that student. 
+			If student requesting his own update then he is allowed update all 
+			properties.
+		 */
+		if(userPrincipal.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))
+			|| userPrincipal.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
+			&& !userPrincipal.getEmail().equalsIgnoreCase(studentDto.getEmail())) {
+				studentEntity.setActive(studentDto.isActive());
+				LOGGER.info("CustomUtils::loadStudentEntityForUpdate() only isActive property is updated. Completed");
+				return studentEntity;
+		}
+		
+		studentEntity.setActive(studentDto.isActive());
+		studentEntity.setCity(studentDto.getCity());
+		studentEntity.setCountry(studentDto.getCountry());
+		studentEntity.setEmail(studentDto.getEmail());
+		studentDto.setEncryptedPassword(bCryptPasswordEncoder.encode(studentDto.getPassword()));
+		studentEntity.setEncryptedPassword(studentDto.getEncryptedPassword());
+		studentEntity.setFirstName(studentDto.getFirstName());
+		studentEntity.setLastName(studentDto.getLastName());
+		studentEntity.setLastUpdateDate(LocalDate.now());
+		studentEntity.setPhone(studentDto.getPhone());
+		studentEntity.setState(studentDto.getState());
+		studentEntity.setLastUpdateDate(LocalDate.now());
+		
+		LOGGER.info("CustomUtils::loadStudentEntityForUpdate() all properties are updated. Completed");
+		return studentEntity;
+	}
+	
 	
 	public static List<CourseEntity> convertToCourseEntityList(List<CourseDto> courseDtoList) {
 		
@@ -570,5 +733,6 @@ public class CustomUtils {
 			
 		}).collect(Collectors.toList());
 	}
+	
 	
 }

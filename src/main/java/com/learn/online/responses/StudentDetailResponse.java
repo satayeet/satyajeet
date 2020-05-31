@@ -1,13 +1,19 @@
 package com.learn.online.responses;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.learn.online.dtos.CourseOrderDto;
 import com.learn.online.dtos.StudentDto;
 
-public class StudentDetailResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class StudentDetailResponse implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	private String studentKey;
 	private String firstName;
 	private String lastName;
@@ -29,12 +35,32 @@ public class StudentDetailResponse {
 		setStudentKey(studentDto.getStudentKey());
 		setFirstName(studentDto.getFirstName());
 		setLastName(studentDto.getLastName());
-		setEncryptedPassword(studentDto.getEncryptedPassword());
+		setEncryptedPassword("**********");
 		setEmail(studentDto.getEmail());
 		setPhone(studentDto.getPhone());
 		setCountry(studentDto.getCountry());
 		setState(studentDto.getState());
-		setCourseOrders(studentDto.getCourseOrders());
+		
+		setCourseOrders(studentDto.getCourseOrders().stream().map(courseOrderDto->{
+			CourseOrderDto tempCourseOrderDto = new CourseOrderDto();
+			
+			tempCourseOrderDto.setCourseOrderKey(courseOrderDto.getCourseOrderKey());
+			tempCourseOrderDto.setCreationDate(courseOrderDto.getCreationDate());
+			tempCourseOrderDto.setDiscount(courseOrderDto.getDiscount());
+			tempCourseOrderDto.setLastUpdateDate(courseOrderDto.getLastUpdateDate());
+			tempCourseOrderDto.setRating(courseOrderDto.getRating());
+
+			courseOrderDto.getCourse().setCourseId(0L); 
+			tempCourseOrderDto.setCourse(courseOrderDto.getCourse());
+			
+			/*	
+			courseOrderDto.getStudent().setStudentId(0L);
+			tempCourseOrderDto.setStudent(courseOrderDto.getStudent());
+			*/
+			
+			return tempCourseOrderDto;
+		}).collect(Collectors.toList()));
+		
 		setActive(studentDto.isActive());
 		setCreationtDate(studentDto.getCreationtDate());
 		setLastUpdateDate(studentDto.getLastUpdateDate());

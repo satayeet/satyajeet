@@ -1,9 +1,15 @@
 package com.learn.online.dtos;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class CourseDto {
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CourseDto implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	private Long courseId;
 	private String courseKey;
 	private String domainName;
