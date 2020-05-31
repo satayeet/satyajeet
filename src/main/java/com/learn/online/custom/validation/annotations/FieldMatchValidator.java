@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
  * property of bean. The FieldMatcherValidator along with FieldMatch annotation is useful for 
  * password confirmation and email confirmation. Because It checks two properties
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  *I also associate it with RoleEntity with many to many association. It keep the authorization 
  *information of student
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  

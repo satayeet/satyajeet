@@ -15,7 +15,7 @@ package com.learn.online.services.impls;
  * and authorization filters use it and even student profile update method of this service-impls uses                  
  * it provided limited update right to admin.                                                                     
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0                         
  * @Purpose PIP Assignment to employee by Cognizant                                                                            
  * @since   2020-05-29                                                                                                                                                                                                                  

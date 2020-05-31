@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  *    one lower case letter and at least  one upper case letter and 
  * 2. Size of password should betweeen 8 to 35 character long.
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  

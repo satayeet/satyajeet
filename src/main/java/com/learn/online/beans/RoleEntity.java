@@ -20,7 +20,7 @@ import javax.persistence.Table;
  *with respect to spring security management using DB. It has many to many association with AuthorityEntity
  *persistent class.
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  

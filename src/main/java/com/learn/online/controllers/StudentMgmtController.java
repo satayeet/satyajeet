@@ -11,7 +11,7 @@ package com.learn.online.controllers;
  *edit and update the active boolean property of logged in user. I have use @PreAuthorize security annotation
  *for provide local or method level security.                      
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0              
  * @Purpose PIP Assignment to employee by Cognizant                                                                                       
  * @since   2020-05-29                                                                                                                                                                                                                  

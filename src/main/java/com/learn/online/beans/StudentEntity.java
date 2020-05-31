@@ -23,7 +23,7 @@ import javax.persistence.Table;
  *associate it with CourseOrderEntity and and RoleEntity. StudentEntity has many to many association with
  *role and one to many association with CourseOrderEntity
  *                                                                                                                 
- * @author Biswajeet Choubey                                                                             
+ * @author Biswajeet                                                                             
  * @version 1.0           
  * @Purpose PIP Assignment to employee by Cognizant                                                                                           
  * @since   2020-05-29                                                                                                                                                                                                                  
